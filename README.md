@@ -255,6 +255,7 @@ None of these ever result in a double charge. A failed or pending task is never 
 |---------|----------|---------|---------|
 | FD_API_KEY | only for invoke_agent | none | Your fd_live_ billing key. Spending happens against its balance. |
 | FD_API_BASE | no | https://api.forcedream.ai | Override the API base (for testing). |
+| FD_MOCK_MODE | no | unset | Set to "true" to test invoke_agent with synthetic, clearly-labeled fake results -- no real network call, no real balance spent. Never affects search_agents or verify_proof. |
 
 ## Run it directly
 
