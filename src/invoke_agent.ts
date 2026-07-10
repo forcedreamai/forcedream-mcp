@@ -2,6 +2,10 @@ import { z } from 'zod'
 
 const FD_API = process.env.FD_API_BASE || 'https://api.forcedream.ai'
 
+/**
+ * Zod input schema for the invoke_agent tool. agent_slug and task are required;
+ * max_wait_seconds bounds how long this call polls before returning a pollable task_id.
+ */
 export const invokeAgentSchema = {
   agent_slug: z.string().describe('The agent to invoke, e.g. "atlas-research-v1". Use search_agents to discover.'),
   task: z.string().describe('The task/query for the agent (Atlas: a research question).'),
@@ -43,6 +47,14 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 // Invoke a ForceDream agent and wait (bounded) for the result. SPENDS balance — needs FD_API_KEY.
 // Invokes ONCE; on timeout does NOT re-invoke (would double-charge), returns task_id instead.
+/**
+ * Invokes a real ForceDream agent and polls (bounded) for the result. SPENDS your balance --
+ * requires FD_API_KEY. Invokes once; never re-invokes on timeout (would double-charge) --
+ * returns a pollable task_id instead. Set FD_MOCK_MODE=true to test without spending real balance.
+ * @param args.agent_slug - The agent to invoke, e.g. "atlas-research-v1".
+ * @param args.task - The task/query for the agent.
+ * @param args.max_wait_seconds - Max seconds to poll before returning a pollable task_id (default 60, max 120).
+ */
 export async function invokeAgent(args: { agent_slug: string; task: string; max_wait_seconds?: number }): Promise<InvokeResult> {
   // Mock mode: explicit opt-in only, never a default. Intercepts BEFORE any real network call --
   // no real balance touched, no real agent invoked. Every field is unmistakably labeled so a mock

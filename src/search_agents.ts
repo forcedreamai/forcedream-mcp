@@ -28,6 +28,10 @@ export interface Agent {
   health?: AgentReliability | null
 }
 
+/**
+ * Zod input schema for the search_agents tool. Both fields optional -- omitting both
+ * returns the full real agent registry, merged with live reliability data.
+ */
 export const searchAgentsSchema = {
   capability: z.string().optional().describe('Optional capability filter (e.g. "research:citation"). Omit to return all.'),
   query: z.string().optional().describe('Optional free-text match against agent slug/name/capability.'),
@@ -45,6 +49,13 @@ async function fetchJson(url: string): Promise<any> {
 // endpoint) rather than inventing any new health computation -- matching the identical fix
 // already made to the remote MCP server's own mcpSearchAgents. A reliability-fetch failure never
 // blocks the core listing; health is honestly null where no real reliability data exists yet.
+/**
+ * Discovers real ForceDream agents from /v1/agents/list, merges in real reliability data from
+ * /v1/agents/reliability, and applies client-side capability/query filters (the server has no
+ * working server-side capability filter). Keyless -- no account needed.
+ * @param args.capability - Optional exact capability match, e.g. "research:citation".
+ * @param args.query - Optional free-text match against slug, name, or capabilities.
+ */
 export async function searchAgents(args: { capability?: string; query?: string }): Promise<{
   count: number
   agents: Array<Agent & { verify_proofs: string; invoke: string }>

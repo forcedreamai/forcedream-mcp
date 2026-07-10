@@ -65,6 +65,13 @@ async function fetchJson(url: string): Promise<any> {
 
 // Trustless verification: fetch public key (+ optionally proof), reconstruct
 // signable, verify Ed25519 locally. Server never asked "is this valid?".
+/**
+ * Trustlessly verifies a ForceDream proof's Ed25519 signature entirely client-side. Fetches the
+ * public key and (if only a task_id is given) the proof itself from public, keyless endpoints,
+ * then verifies locally -- ForceDream is never asked whether the proof is valid.
+ * @param args.task_id - Fetches the proof from the public endpoint if proof is not given directly.
+ * @param args.proof - A full proof object to verify directly, skipping the fetch.
+ */
 export async function verifyProof(args: { task_id?: string; proof?: FdProof }): Promise<VerifyResult> {
   let proof = args.proof
   if (!proof) {

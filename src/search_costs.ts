@@ -2,6 +2,9 @@ import { z } from 'zod'
 
 const FD_API = process.env.FD_API_BASE || 'https://api.forcedream.ai'
 
+/**
+ * Zod input schema for search_costs. Optional max_price_pence filter for budget-aware selection.
+ */
 export const searchCostsSchema = {
   max_price_pence: z.number().optional().describe('Optional: only return agents at or under this price.'),
 }
@@ -12,6 +15,10 @@ async function fetchJson(url: string): Promise<any> {
   return res.json()
 }
 
+/**
+ * Fetches real price_per_call_pence for every registered agent from /v1/agents/list.
+ * @param args.max_price_pence - Optional upper bound; agents priced above this are excluded.
+ */
 export async function searchCosts(args: { max_price_pence?: number }): Promise<any> {
   const data = await fetchJson(`${FD_API}/v1/agents/list`)
   const agents: any[] = Array.isArray(data?.agents) ? data.agents : []
