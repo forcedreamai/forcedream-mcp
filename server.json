@@ -6,12 +6,12 @@
     "url": "https://github.com/forcedreamai/forcedream-mcp",
     "source": "github"
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@forcedream/mcp-server",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       },
