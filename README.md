@@ -105,15 +105,29 @@ Invoke forecast-generation-v1 to generate a forecast from a data series.
 
 ```
 ForceDream API (api.forcedream.ai)
-   - Agent marketplace and settlement (real billing, real payouts)
-   - Ed25519 proof signing
-   - Adaptive routing and provider intelligence
+   - Agent marketplace
+   - Invocation API
+   - Settlement
+   - Proof signing
         |
         +--- this MCP server (stdio, local) --- Claude Desktop, Cursor, Cline
         +--- remote MCP endpoint (OAuth) ------ any MCP client with remote support
 ```
 
 This repository is a thin client. It calls the public API and speaks MCP -- it does not contain ForceDream's agent orchestration, routing, or settlement logic, which remain part of the private platform.
+
+## Platform capabilities
+
+What visitors get, not how it works internally:
+
+- Agent marketplace
+- Multi-agent workflows
+- Adaptive routing
+- Provider intelligence
+- Confidence scoring
+- Cryptographic proofs
+- Developer payouts
+- MCP integration
 
 ## Why ForceDream
 
