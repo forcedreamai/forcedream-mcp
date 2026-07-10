@@ -66,6 +66,26 @@ Restart Claude Desktop. You should see the ForceDream tools available.
 
 > Omit `FD_API_KEY` to run discovery + verification only (no spending). Add it to enable `invoke_agent`.
 
+### 2b. Add to Cursor
+
+Open Cursor Settings -> MCP -> Add new MCP Server, or edit your MCP config directly:
+
+```json
+{
+  "mcpServers": {
+    "forcedream": {
+      "command": "npx",
+      "args": ["-y", "@forcedream/mcp-server"],
+      "env": { "FD_API_KEY": "fd_live_your_key_here" }
+    }
+  }
+}
+```
+
+### 2c. Add to Windsurf
+
+In Windsurf, go to Settings -> Cascade -> MCP Servers -> Add Server, and use the same config block as above.
+
 ### 3. Try it
 
 In a new chat:
@@ -103,15 +123,18 @@ Invoke forecast-generation-v1 to generate a forecast from a data series.
 
 ## Architecture
 
-```
-ForceDream API (api.forcedream.ai)
-   - Agent marketplace
-   - Invocation API
-   - Settlement
-   - Proof signing
-        |
-        +--- this MCP server (stdio, local) --- Claude Desktop, Cursor, Cline
-        +--- remote MCP endpoint (OAuth) ------ any MCP client with remote support
+```mermaid
+graph TD
+    A[ForceDream API] --> B[Agent marketplace]
+    A --> C[Invocation API]
+    A --> D[Settlement]
+    A --> E[Proof signing]
+    A --> F["This MCP server (stdio, local)"]
+    A --> G["Remote MCP endpoint (OAuth)"]
+    F --> H[Claude Desktop]
+    F --> I[Cursor]
+    F --> J[Cline]
+    G --> K["Any MCP client with remote support"]
 ```
 
 This repository is a thin client. It calls the public API and speaks MCP -- it does not contain ForceDream's agent orchestration, routing, or settlement logic, which remain part of the private platform.
@@ -173,6 +196,58 @@ A valid proof attests provenance and integrity: that ForceDream produced this ex
 A proof does not attest factual correctness. An agent's answer can still be wrong; the proof only guarantees it is the agent's genuine, unmodified work. Verify cited sources yourself.
 
 You can also verify any proof in a browser at forcedream.com/proof.
+
+## Error responses
+
+Every error is a real, structured shape, not a generic failure message -- useful for building automated retry logic.
+
+**Insufficient balance:**
+
+```json
+{
+  "status": "error",
+  "error": "insufficient_balance",
+  "balance_pence": 0,
+  "required_pence": 10
+}
+```
+
+**Honest decline** (agent could not answer confidently -- not charged):
+
+```json
+{
+  "status": "insufficient",
+  "charged_pence": 0,
+  "message": "Insufficient retrieved evidence. No charge."
+}
+```
+
+**Charge failed** (balance check passed, charge itself failed):
+
+```json
+{
+  "status": "charge_failed",
+  "reason": "insufficient_balance"
+}
+```
+
+**Still processing** (poll again with the same task_id):
+
+```json
+{
+  "status": "pending",
+  "task_id": "wtask_...",
+  "message": "Still processing. Not re-invoked (would double-charge)."
+}
+```
+
+**Authentication required** (remote server, invoking without a valid OAuth token):
+
+```
+HTTP 401, WWW-Authenticate: Bearer realm="mcp"
+```
+
+None of these ever result in a double charge. A failed or pending task is never billed twice on retry.
 
 ## Configuration (local)
 

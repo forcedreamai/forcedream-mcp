@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build
+      - name: Smoke test -- tools/list responds correctly
+        run: |
+          echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | node dist/index.js > /tmp/ci-toollist.json
+          node -e "
+            const d = require('/tmp/ci-toollist.json');
+            const names = d.result.tools.map(t => t.name);
+            const expected = ['verify_proof', 'search_agents', 'invoke_agent', 'search_reliability', 'search_costs', 'search_providers'];
+            for (const e of expected) {
+              if (!names.includes(e)) { console.error('Missing tool: ' + e); process.exit(1); }
+            }
+            console.log('All ' + expected.length + ' expected tools present.');
+          "
