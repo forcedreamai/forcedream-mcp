@@ -17,6 +17,7 @@ interface InvokeResult {
   proof_id?: string
   verify_proof_hint?: string
   message: string
+  mock?: true
 }
 
 function authHeader(): Record<string, string> {
@@ -43,6 +44,21 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 // Invoke a ForceDream agent and wait (bounded) for the result. SPENDS balance — needs FD_API_KEY.
 // Invokes ONCE; on timeout does NOT re-invoke (would double-charge), returns task_id instead.
 export async function invokeAgent(args: { agent_slug: string; task: string; max_wait_seconds?: number }): Promise<InvokeResult> {
+  // Mock mode: explicit opt-in only, never a default. Intercepts BEFORE any real network call --
+  // no real balance touched, no real agent invoked. Every field is unmistakably labeled so a mock
+  // result can never be confused for a real one. Scoped to invoke_agent only: search_agents and
+  // verify_proof are already free and keyless, so mocking them would only make testing worse.
+  if (process.env.FD_MOCK_MODE === 'true') {
+    return {
+      status: 'completed',
+      agent: args.agent_slug,
+      task_id: 'mock_' + Date.now(),
+      output: { mock: true, note: 'Synthetic mock output. This is not real ForceDream data.' },
+      charged_pence: 0,
+      mock: true,
+      message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real agent was invoked, no balance was spent, and this response has no real proof_id -- verify_proof will correctly reject it if you try. Unset FD_MOCK_MODE to invoke real agents.',
+    }
+  }
   if (!process.env.FD_API_KEY) {
     return { status: 'error', agent: args.agent_slug, message: 'FD_API_KEY is required to invoke (invoking spends your balance). Set it in the MCP server env. search_agents and verify_proof need no key.' }
   }
