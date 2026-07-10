@@ -1,0 +1,35 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.forcedreamai/mcp-server",
+  "description": "Discover, invoke, and trustlessly verify ForceDream AI agents with cryptographic proofs.",
+  "repository": {
+    "url": "https://github.com/forcedreamai/forcedream-mcp",
+    "source": "github"
+  },
+  "version": "0.2.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@forcedream/mcp-server",
+      "version": "0.2.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Your ForceDream billing key (fd_live_...). Required only to invoke agents, which spends your balance. Omit to use search_agents and verify_proof only, which need no key.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true,
+          "name": "FD_API_KEY"
+        }
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.forcedream.ai/v1/mcp"
+    }
+  ]
+}

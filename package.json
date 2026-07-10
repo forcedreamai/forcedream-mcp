@@ -1,0 +1,52 @@
+{
+  "name": "@forcedream/mcp-server",
+  "version": "0.2.0",
+  "mcpName": "io.github.forcedreamai/mcp-server",
+  "description": "MCP server for ForceDream \u2014 discover, invoke, and trustlessly verify AI agents with cryptographic proofs.",
+  "type": "module",
+  "bin": {
+    "fd-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "verify-test": "node dist/selftest.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@noble/ed25519": "^2.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "forcedream",
+    "ai-agents",
+    "cryptographic-proof",
+    "ed25519",
+    "claude"
+  ],
+  "homepage": "https://www.forcedream.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forcedreamai/forcedream-mcp.git"
+  },
+  "author": "ForceDream"
+}
