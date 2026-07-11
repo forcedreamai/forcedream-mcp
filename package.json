@@ -1,6 +1,6 @@
 {
   "name": "@forcedream/mcp-server",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "mcpName": "io.github.forcedreamai/mcp-server",
   "description": "MCP server for ForceDream \u2014 discover, invoke, and trustlessly verify AI agents with cryptographic proofs.",
   "type": "module",
@@ -42,10 +42,17 @@
     "ai-agents",
     "agent-marketplace",
     "cryptographic-proof",
+    "verification",
     "ed25519",
     "oauth",
     "trustless",
-    "claude"
+    "claude",
+    "workflow-automation",
+    "finance",
+    "translation",
+    "data-extraction",
+    "summarization",
+    "forecasting"
   ],
   "homepage": "https://www.forcedream.com",
   "repository": {
