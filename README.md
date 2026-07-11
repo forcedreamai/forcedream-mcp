@@ -271,6 +271,7 @@ It speaks MCP over stdio; point any MCP client at it.
 - Verify a proof: https://www.forcedream.com/proof
 - Official MCP Registry entry: https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.forcedreamai/mcp-server
 - MCP: https://modelcontextprotocol.io
+- Real, tested examples: [EXAMPLES.md](./EXAMPLES.md)
 
 ## License
 
