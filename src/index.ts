@@ -11,7 +11,7 @@ import { searchProviders } from './search_providers.js'
 
 const server = new McpServer({ name: 'forcedream', version: '0.3.0' })
 
-// verify_proof — trustless, keyless. Verify a ForceDream proof's Ed25519 signature client-side.
+// forcedream_verify_proof — trustless, keyless. Verify a ForceDream proof's Ed25519 signature client-side.
 server.registerTool(
   'forcedream_verify_proof',
   {
@@ -35,7 +35,7 @@ server.registerTool(
   }
 )
 
-// search_agents — keyless discovery of real agents with honest, system-derived metrics.
+// forcedream_search_agents — keyless discovery of real agents with honest, system-derived metrics.
 server.registerTool(
   'forcedream_search_agents',
   {
@@ -56,7 +56,7 @@ server.registerTool(
   }
 )
 
-// invoke_agent — spends balance (needs FD_API_KEY). Returns output + a verifiable proof_id.
+// forcedream_invoke_agent — spends balance (needs FD_API_KEY). Returns output + a verifiable proof_id.
 server.registerTool(
   'forcedream_invoke_agent',
   {
@@ -77,7 +77,7 @@ server.registerTool(
   }
 )
 
-// search_reliability — keyless. Real, system-measured reliability per agent.
+// forcedream_search_reliability — keyless. Real, system-measured reliability per agent.
 server.registerTool(
   'forcedream_search_reliability',
   {
@@ -97,7 +97,7 @@ server.registerTool(
   }
 )
 
-// search_costs — keyless. Real price_per_call_pence per agent.
+// forcedream_search_costs — keyless. Real price_per_call_pence per agent.
 server.registerTool(
   'forcedream_search_costs',
   {
@@ -117,7 +117,7 @@ server.registerTool(
   }
 )
 
-// search_providers — keyless. Real, live inference-provider health.
+// forcedream_search_providers — keyless. Real, live inference-provider health.
 server.registerTool(
   'forcedream_search_providers',
   {

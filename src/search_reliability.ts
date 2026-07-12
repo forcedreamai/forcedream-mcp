@@ -3,7 +3,7 @@ import { z } from 'zod'
 const FD_API = process.env.FD_API_BASE || 'https://api.forcedream.ai'
 
 /**
- * Zod input schema for search_reliability. Optional agent_slug filter; omit for all agents.
+ * Zod input schema for forcedream_search_reliability. Optional agent_slug filter; omit for all agents.
  */
 export const searchReliabilitySchema = {
   agent_slug: z.string().optional().describe('Optional: filter to one agent slug. Omit to return all.'),

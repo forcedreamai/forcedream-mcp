@@ -3,7 +3,7 @@ import { z } from 'zod'
 const FD_API = process.env.FD_API_BASE || 'https://api.forcedream.ai'
 
 /**
- * Zod input schema for search_costs. Optional max_price_pence filter for budget-aware selection.
+ * Zod input schema for forcedream_search_costs. Optional max_price_pence filter for budget-aware selection.
  */
 export const searchCostsSchema = {
   max_price_pence: z.number().optional().describe('Optional: only return agents at or under this price.'),

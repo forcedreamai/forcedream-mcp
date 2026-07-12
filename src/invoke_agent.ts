@@ -3,11 +3,11 @@ import { z } from 'zod'
 const FD_API = process.env.FD_API_BASE || 'https://api.forcedream.ai'
 
 /**
- * Zod input schema for the invoke_agent tool. agent_slug and task are required;
+ * Zod input schema for the forcedream_invoke_agent tool. agent_slug and task are required;
  * max_wait_seconds bounds how long this call polls before returning a pollable task_id.
  */
 export const invokeAgentSchema = {
-  agent_slug: z.string().describe('The agent to invoke, e.g. "atlas-research-v1". Use search_agents to discover.'),
+  agent_slug: z.string().describe('The agent to invoke, e.g. "atlas-research-v1". Use forcedream_search_agents to discover.'),
   task: z.string().describe('The task/query for the agent (Atlas: a research question).'),
   max_wait_seconds: z.number().optional().describe('Max seconds to poll (default 60). On timeout, returns task_id to poll later.'),
 }
@@ -58,8 +58,9 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 export async function invokeAgent(args: { agent_slug: string; task: string; max_wait_seconds?: number }): Promise<InvokeResult> {
   // Mock mode: explicit opt-in only, never a default. Intercepts BEFORE any real network call --
   // no real balance touched, no real agent invoked. Every field is unmistakably labeled so a mock
-  // result can never be confused for a real one. Scoped to invoke_agent only: search_agents and
-  // verify_proof are already free and keyless, so mocking them would only make testing worse.
+  // result can never be confused for a real one. Scoped to forcedream_invoke_agent only:
+  // forcedream_search_agents and forcedream_verify_proof are already free and keyless, so mocking
+  // them would only make testing worse.
   if (process.env.FD_MOCK_MODE === 'true') {
     return {
       status: 'completed',
@@ -68,11 +69,11 @@ export async function invokeAgent(args: { agent_slug: string; task: string; max_
       output: { mock: true, note: 'Synthetic mock output. This is not real ForceDream data.' },
       charged_pence: 0,
       mock: true,
-      message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real agent was invoked, no balance was spent, and this response has no real proof_id -- verify_proof will correctly reject it if you try. Unset FD_MOCK_MODE to invoke real agents.',
+      message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real agent was invoked, no balance was spent, and this response has no real proof_id -- forcedream_verify_proof will correctly reject it if you try. Unset FD_MOCK_MODE to invoke real agents.',
     }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', agent: args.agent_slug, message: 'FD_API_KEY is required to invoke (invoking spends your balance). Set it in the MCP server env. search_agents and verify_proof need no key.' }
+    return { status: 'error', agent: args.agent_slug, message: 'FD_API_KEY is required to invoke (invoking spends your balance). Set it in the MCP server env. forcedream_search_agents and forcedream_verify_proof need no key.' }
   }
   const slug = args.agent_slug
   const maxWaitMs = Math.max(5, Math.min(120, args.max_wait_seconds ?? 60)) * 1000
@@ -97,7 +98,7 @@ export async function invokeAgent(args: { agent_slug: string; task: string; max_
       return {
         status: 'completed', agent: slug, task_id: taskId, output: d.output, charged_pence: d.charged_pence,
         proof_id: d.proof_id || taskId,
-        verify_proof_hint: `Verify trustlessly: call verify_proof with task_id "${d.proof_id || taskId}". The signature proves authenticity without trusting ForceDream.`,
+        verify_proof_hint: `Verify trustlessly: call forcedream_verify_proof with task_id "${d.proof_id || taskId}". The signature proves authenticity without trusting ForceDream.`,
         message: `Completed. Charged ${d.charged_pence}p. Cryptographically proven (proof_id ${d.proof_id || taskId}).`,
       }
     }

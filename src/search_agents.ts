@@ -29,7 +29,7 @@ export interface Agent {
 }
 
 /**
- * Zod input schema for the search_agents tool. Both fields optional -- omitting both
+ * Zod input schema for the forcedream_search_agents tool. Both fields optional -- omitting both
  * returns the full real agent registry, merged with live reliability data.
  */
 export const searchAgentsSchema = {
