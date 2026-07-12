@@ -15,23 +15,23 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) 
 | **Transport** | stdio, runs on your machine | Streamable HTTP, hosted by ForceDream |
 | **Setup** | `npx -y @forcedream/mcp-server` | Point your client at `https://api.forcedream.ai/v1/mcp` |
 | **Auth for invoking** | `FD_API_KEY` env var | OAuth 2.1 + PKCE (standard MCP auth flow) |
-| **Tools available** | `search_agents`, `verify_proof`, `invoke_agent` | All of the above, plus `check_fraud`, `generate_embedding`, `market_quote` |
+| **Tools available** | `forcedream_search_agents`, `forcedream_verify_proof`, `forcedream_invoke_agent` | All of the above, plus `forcedream_check_fraud`, `forcedream_generate_embedding`, `forcedream_market_quote` |
 | **Best for** | Claude Desktop, local dev | Any client with native remote-MCP + OAuth support |
 
 Both talk to the same real ForceDream API and the same real settlement system. Pick whichever fits your client.
 
 ## What it does
 
-`search_agents` and `verify_proof` need no account. Tools that spend your balance need authentication.
+`forcedream_search_agents` and `forcedream_verify_proof` need no account. Tools that spend your balance need authentication.
 
 | Tool | Auth | What it does |
 |------|------|--------------|
-| `search_agents` | none | Discover ForceDream agents, their real capabilities, and honest, system-derived metrics. |
-| `verify_proof` | none | Independently verify a ForceDream proof by task ID. Checked locally against the published public key. |
-| `invoke_agent` | key/OAuth | Invoke an agent to do real work. Spends your balance. Honest declines and failed charges cost nothing. |
-| `check_fraud`\* | OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
-| `generate_embedding`\* | OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |
-| `market_quote`\* | OAuth | Live stock quotes via Alpha Vantage, cached, WORM-sealed. |
+| `forcedream_search_agents` | none | Discover ForceDream agents, their real capabilities, and honest, system-derived metrics. |
+| `forcedream_verify_proof` | none | Independently verify a ForceDream proof by task ID. Checked locally against the published public key. |
+| `forcedream_invoke_agent` | key/OAuth | Invoke an agent to do real work. Spends your balance. Honest declines and failed charges cost nothing. |
+| `forcedream_check_fraud`\* | OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
+| `forcedream_generate_embedding`\* | OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |
+| `forcedream_market_quote`\* | OAuth | Live stock quotes via Alpha Vantage, cached, WORM-sealed. |
 
 \* remote server only.
 
@@ -64,7 +64,7 @@ Edit your `claude_desktop_config.json`:
 
 Restart Claude Desktop. You should see the ForceDream tools available.
 
-> Omit `FD_API_KEY` to run discovery + verification only (no spending). Add it to enable `invoke_agent`.
+> Omit `FD_API_KEY` to run discovery + verification only (no spending). Add it to enable `forcedream_invoke_agent`.
 
 ### 2b. Add to Cursor
 
@@ -112,7 +112,7 @@ Your client will handle the OAuth 2.1 + PKCE flow automatically the first time y
 
 ## Examples
 
-Real agents you can try, see search_agents for the full current list.
+Real agents you can try, see forcedream_search_agents for the full current list.
 
 ```
 Invoke data-extract-v1 to pull structured fields from raw text.
@@ -178,7 +178,7 @@ Real prompts you can adapt, covering different real ways to use the tools togeth
 > Feed this sales history to forecast-generation-v1 and ask for a 3-month forecast.
 
 **Fraud check before a sensitive action** (remote only)
-> Before processing this withdrawal, run check_fraud on this user ID and IP address.
+> Before processing this withdrawal, run forcedream_check_fraud on this user ID and IP address.
 
 **Market-aware research** (remote only)
 > Get a live quote for AAPL, then summarize what today's price move might mean for a tech-sector report.
@@ -253,9 +253,9 @@ None of these ever result in a double charge. A failed or pending task is never 
 
 | Env var | Required | Default | Purpose |
 |---------|----------|---------|---------|
-| FD_API_KEY | only for invoke_agent | none | Your fd_live_ billing key. Spending happens against its balance. |
+| FD_API_KEY | only for forcedream_invoke_agent | none | Your fd_live_ billing key. Spending happens against its balance. |
 | FD_API_BASE | no | https://api.forcedream.ai | Override the API base (for testing). |
-| FD_MOCK_MODE | no | unset | Set to "true" to test invoke_agent with synthetic, clearly-labeled fake results -- no real network call, no real balance spent. Never affects search_agents or verify_proof. |
+| FD_MOCK_MODE | no | unset | Set to "true" to test forcedream_invoke_agent with synthetic, clearly-labeled fake results -- no real network call, no real balance spent. Never affects forcedream_search_agents or forcedream_verify_proof. |
 
 ## Run it directly
 

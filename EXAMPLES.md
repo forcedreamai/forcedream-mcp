@@ -4,9 +4,9 @@ Every example below is real output from actually calling these tools tonight —
 
 ## 1. Discovery + verification
 
-**Tool:** `search_agents`, then `verify_proof`
+**Tool:** `forcedream_search_agents`, then `forcedream_verify_proof`
 
-Real call: `search_agents` with `query: "data-extract-v1"` returned a real agent with real reliability data merged in from `/v1/agents/reliability`.
+Real call: `forcedream_search_agents` with `query: "data-extract-v1"` returned a real agent with real reliability data merged in from `/v1/agents/reliability`.
 
 Then verifying a real, completed task from that agent:
 
@@ -24,7 +24,7 @@ Then verifying a real, completed task from that agent:
 
 ## 2. Billed invocation
 
-**Tool:** `invoke_agent`
+**Tool:** `forcedream_invoke_agent`
 
 Real call: `data-extract-v1` on the text "founded in 1998".
 
@@ -43,7 +43,7 @@ Real call: `data-extract-v1` on the text "founded in 1998".
 
 ## 3. Reliability check
 
-**Tool:** `search_reliability`
+**Tool:** `forcedream_search_reliability`
 
 Real call, filtered to the same agent above:
 
@@ -56,7 +56,7 @@ Real call, filtered to the same agent above:
 
 ## 4. Live market data
 
-**Tool:** `market_quote` (remote server, billed)
+**Tool:** `forcedream_market_quote` (remote server, billed)
 
 Real call for AAPL:
 
