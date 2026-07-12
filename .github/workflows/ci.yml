@@ -26,7 +26,7 @@ jobs:
           node -e "
             const d = require('/tmp/ci-toollist.json');
             const names = d.result.tools.map(t => t.name);
-            const expected = ['verify_proof', 'search_agents', 'invoke_agent', 'search_reliability', 'search_costs', 'search_providers'];
+            const expected = ['forcedream_verify_proof', 'forcedream_search_agents', 'forcedream_invoke_agent', 'forcedream_search_reliability', 'forcedream_search_costs', 'forcedream_search_providers'];
             for (const e of expected) {
               if (!names.includes(e)) { console.error('Missing tool: ' + e); process.exit(1); }
             }
