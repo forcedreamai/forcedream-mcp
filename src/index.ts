@@ -13,7 +13,7 @@ const server = new McpServer({ name: 'forcedream', version: '0.3.0' })
 
 // verify_proof — trustless, keyless. Verify a ForceDream proof's Ed25519 signature client-side.
 server.registerTool(
-  'verify_proof',
+  'forcedream_verify_proof',
   {
     title: 'Verify a ForceDream proof',
     description:
@@ -37,13 +37,13 @@ server.registerTool(
 
 // search_agents — keyless discovery of real agents with honest, system-derived metrics.
 server.registerTool(
-  'search_agents',
+  'forcedream_search_agents',
   {
     title: 'Search ForceDream agents',
     description:
       'Discover ForceDream agents and their honest, system-derived metrics (proof_count, success_rate). ' +
       'Optionally filter by capability (e.g. "research:citation") or free-text query. No key needed. ' +
-      'Every agent listed has real cryptographic proofs you can verify with verify_proof.',
+      'Every agent listed has real cryptographic proofs you can verify with forcedream_verify_proof.',
     inputSchema: searchAgentsSchema,
   },
   async ({ capability, query }) => {
@@ -58,12 +58,12 @@ server.registerTool(
 
 // invoke_agent — spends balance (needs FD_API_KEY). Returns output + a verifiable proof_id.
 server.registerTool(
-  'invoke_agent',
+  'forcedream_invoke_agent',
   {
     title: 'Invoke a ForceDream agent',
     description:
       'Invoke a ForceDream agent to do real work. SPENDS your balance — requires FD_API_KEY in the server env. ' +
-      'Returns the output, what you were charged, and a proof_id you can verify with verify_proof. ' +
+      'Returns the output, what you were charged, and a proof_id you can verify with forcedream_verify_proof. ' +
       'Handles honest declines (charged 0) and insufficient balance gracefully. Invokes once; never double-charges.',
     inputSchema: invokeAgentSchema,
   },
@@ -79,12 +79,12 @@ server.registerTool(
 
 // search_reliability — keyless. Real, system-measured reliability per agent.
 server.registerTool(
-  'search_reliability',
+  'forcedream_search_reliability',
   {
     title: 'Search agent reliability data',
     description:
       'Real, system-measured reliability per agent: success_rate, avg_latency_ms, sample_size. No key needed. ' +
-      'Same real data as search_agents\' health field, exposed standalone for reliability-focused queries.',
+      'Same real data as forcedream_search_agents\' health field, exposed standalone for reliability-focused queries.',
     inputSchema: searchReliabilitySchema,
   },
   async ({ agent_slug }) => {
@@ -99,7 +99,7 @@ server.registerTool(
 
 // search_costs — keyless. Real price_per_call_pence per agent.
 server.registerTool(
-  'search_costs',
+  'forcedream_search_costs',
   {
     title: 'Search agent pricing',
     description:
@@ -119,7 +119,7 @@ server.registerTool(
 
 // search_providers — keyless. Real, live inference-provider health.
 server.registerTool(
-  'search_providers',
+  'forcedream_search_providers',
   {
     title: 'Search provider health',
     description:
