@@ -46,4 +46,9 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.tags.outputs.tags }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+          # Real issue found live: linux/arm64 (via QEMU emulation on this x86_64 runner)
+          # ran for 28+ minutes without completing and had to be cancelled -- unusually long
+          # even accounting for emulation overhead for what's a pure-JS build (no native
+          # module compilation). Dropped for now to get one platform reliably working;
+          # worth revisiting arm64 separately once this is confirmed stable.
