@@ -52,8 +52,11 @@ jobs:
           push: true
           tags: ${{ steps.tags.outputs.tags }}
           platforms: linux/amd64
-          # Real issue found live: linux/arm64 (via QEMU emulation on this x86_64 runner)
-          # ran for 28+ minutes without completing and had to be cancelled -- unusually long
-          # even accounting for emulation overhead for what's a pure-JS build (no native
-          # module compilation). Dropped for now to get one platform reliably working;
-          # worth revisiting arm64 separately once this is confirmed stable.
+          # Real fix: docker/build-push-action generates a build provenance attestation by
+          # default, which pushes an additional attestation manifest alongside the image --
+          # a known, documented cause of this exact "insufficient scopes" error on personal
+          # (non-organization) Docker Hub accounts, even with a correctly-scoped token for
+          # the image push itself. Confirmed live: the token has Read/Write/Delete scope and
+          # was genuinely used (timestamps match), so the token's own permissions were never
+          # the actual problem.
+          provenance: false
