@@ -10,7 +10,7 @@ nothing would ever be connected to its stdin.
 ## Pull
 
 ```bash
-docker pull forcedreamai/forcedream-mcp
+docker pull forcedream/forcedream-mcp
 ```
 
 ## Use with Claude Desktop (or any stdio-based MCP host)
@@ -23,7 +23,7 @@ Add this to your MCP client's config (for Claude Desktop,
   "mcpServers": {
     "forcedream": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "forcedreamai/forcedream-mcp"]
+      "args": ["run", "-i", "--rm", "forcedream/forcedream-mcp"]
     }
   }
 }
@@ -35,7 +35,7 @@ Add this to your MCP client's config (for Claude Desktop,
 ## Run it directly, for manual testing
 
 ```bash
-docker run -i --rm forcedreamai/forcedream-mcp
+docker run -i --rm forcedream/forcedream-mcp
 ```
 
 Then type a real MCP JSON-RPC request on stdin, e.g.:
@@ -54,13 +54,13 @@ tool argument, not a container-level secret. If that changes in a future version
 variables the standard way:
 
 ```bash
-docker run -i --rm -e SOME_VAR=value forcedreamai/forcedream-mcp
+docker run -i --rm -e SOME_VAR=value forcedream/forcedream-mcp
 ```
 
 ## Building locally
 
 ```bash
-docker build -t forcedreamai/forcedream-mcp .
+docker build -t forcedream/forcedream-mcp .
 ```
 
 Multi-stage: the build stage installs `devDependencies` (needed for `tsc`), the runtime

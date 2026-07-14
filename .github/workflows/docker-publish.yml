@@ -34,9 +34,14 @@ jobs:
       - name: Determine image tags
         id: tags
         run: |
-          TAGS="forcedreamai/forcedream-mcp:latest"
+          # Real fix: pushes were failing with "insufficient scopes" regardless of the
+          # token's own permissions -- the actual root cause was a namespace mismatch, not
+          # a token problem. forcedreamai is the GitHub org name; the real Docker Hub
+          # username is forcedream (no "ai"), confirmed directly. A token on that account
+          # has no authority to push into a different, separate forcedreamai namespace.
+          TAGS="forcedream/forcedream-mcp:latest"
           if [ "${{ github.event_name }}" = "release" ]; then
-            TAGS="$TAGS,forcedreamai/forcedream-mcp:${{ github.event.release.tag_name }}"
+            TAGS="$TAGS,forcedream/forcedream-mcp:${{ github.event.release.tag_name }}"
           fi
           echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
 
