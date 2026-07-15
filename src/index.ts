@@ -8,8 +8,17 @@ import { invokeAgent, invokeAgentSchema } from './invoke_agent.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
 
-const server = new McpServer({ name: 'forcedream', version: '0.3.0' })
+// Real fix for the version mismatch (this file previously hardcoded '0.3.0' as a separate,
+// independently-drifting string, while package.json said '0.5.1'): read the one, real,
+// canonical version at startup, so there is only ever one place this number lives.
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8')) as { version: string }
+
+const server = new McpServer({ name: 'forcedream', version: pkg.version })
 
 // forcedream_verify_proof — trustless, keyless. Verify a ForceDream proof's Ed25519 signature client-side.
 server.registerTool(
