@@ -6,6 +6,7 @@ import { verifyProof, type FdProof } from './verify_proof.js'
 import { searchAgents, searchAgentsSchema } from './search_agents.js'
 import { invokeAgent, invokeAgentSchema } from './invoke_agent.js'
 import { securityScan, securityScanSchema } from './security_scan.js'
+import { extractData, extractDataSchema } from './extract_data.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -104,6 +105,31 @@ server.registerTool(
   async ({ code, max_wait_seconds }) => {
     try {
       const result = await securityScan({ code, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_extract_data — dedicated, named tool for data-extract-v1 specifically.
+// Spends balance (needs FD_API_KEY). Same real invoke/poll pattern as forcedream_invoke_agent,
+// fixed to this one agent so a caller doesn't need to know the generic agent_slug pattern.
+server.registerTool(
+  'forcedream_extract_data',
+  {
+    title: 'Extract structured fields from a document',
+    description:
+      'Structured JSON extraction from unstructured text -- grounded in real, live verification, not just ' +
+      'pattern-matching. Pulls requested fields, nulls anything missing, never guesses. Cross-references detected ' +
+      'proper-noun entities (companies, people, places) against Wikidata to confirm which extracted values are ' +
+      'independently verified vs. unconfirmed. SPENDS your balance — requires FD_API_KEY. Returns the extracted ' +
+      'rows, what you were charged, and a proof_id.',
+    inputSchema: extractDataSchema,
+  },
+  async ({ fields, document, max_wait_seconds }) => {
+    try {
+      const result = await extractData({ fields, document, max_wait_seconds })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
