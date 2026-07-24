@@ -7,6 +7,7 @@ import { searchAgents, searchAgentsSchema } from './search_agents.js'
 import { invokeAgent, invokeAgentSchema } from './invoke_agent.js'
 import { securityScan, securityScanSchema } from './security_scan.js'
 import { extractData, extractDataSchema } from './extract_data.js'
+import { checkFraud, checkFraudSchema, generateEmbedding, generateEmbeddingSchema, marketQuote, marketQuoteSchema } from './direct_tools.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -130,6 +131,69 @@ server.registerTool(
   async ({ fields, document, max_wait_seconds }) => {
     try {
       const result = await extractData({ fields, document, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_check_fraud — real, direct, synchronous call (no polling). Spends balance
+// (needs FD_API_KEY). Uses the new, dedicated fd_live_-accepting backend endpoint.
+server.registerTool(
+  'forcedream_check_fraud',
+  {
+    title: 'Check IP / account fraud risk',
+    description:
+      'Real fraud risk assessment using AbuseIPDB IP reputation data. SPENDS your balance — requires FD_API_KEY. ' +
+      'Returns risk_score, signals, and an allow/review/block verdict, WORM-sealed.',
+    inputSchema: checkFraudSchema,
+  },
+  async ({ ip }) => {
+    try {
+      const result = await checkFraud({ ip })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_generate_embedding — real, direct, synchronous call (no polling). Spends
+// balance (needs FD_API_KEY, per-token charge).
+server.registerTool(
+  'forcedream_generate_embedding',
+  {
+    title: 'Generate a text embedding',
+    description:
+      'Real 1024-dim vector embedding via Voyage voyage-3.5, retrieval-optimised. SPENDS your balance ' +
+      '(per-token charge) — requires FD_API_KEY. Returns the vector, dimensions, token count, WORM-sealed.',
+    inputSchema: generateEmbeddingSchema,
+  },
+  async ({ text, input_type }) => {
+    try {
+      const result = await generateEmbedding({ text, input_type })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_market_quote — real, direct, synchronous call (no polling). Spends balance
+// (needs FD_API_KEY). Hard-cached server-side.
+server.registerTool(
+  'forcedream_market_quote',
+  {
+    title: 'Get a live market quote',
+    description:
+      'Real, live market quote for a stock symbol via Alpha Vantage: price, change %, volume, day high/low, ' +
+      'liquidity score. SPENDS your balance — requires FD_API_KEY. Hard-cached, WORM-sealed.',
+    inputSchema: marketQuoteSchema,
+  },
+  async ({ symbol }) => {
+    try {
+      const result = await marketQuote({ symbol })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
