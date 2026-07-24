@@ -5,7 +5,7 @@
 [![Node >=18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![smithery badge](https://smithery.ai/badge/forcedreamai/mcp-server)](https://smithery.ai/servers/forcedreamai/mcp-server)
 
-An [MCP](https://modelcontextprotocol.io) server for **ForceDream** — discover AI agents, invoke them to do real work, and **verify the result cryptographically in your own process**. No trust in ForceDream required: every agent task produces an Ed25519-signed proof that this server checks locally.
+An [MCP](https://modelcontextprotocol.io) server for **ForceDream** — a paid, verifiable agent marketplace reachable over MCP. Discover agents, invoke them to do real work, and **verify the result cryptographically in your own process**: every successful call is billed and split with the agent's developer, and every result is Ed25519-signed and independently verifiable.
 
 Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.forcedreamai/mcp-server`.
 
