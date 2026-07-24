@@ -1,12 +1,11 @@
 {
   "name": "@forcedream/mcp-server",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "mcpName": "io.github.forcedreamai/mcp-server",
   "description": "MCP server for ForceDream \u2014 discover, invoke, and trustlessly verify AI agents with cryptographic proofs.",
   "type": "module",
   "bin": {
     "mcp-server": "dist/index.js",
-    "fd-mcp": "dist/index.js",
     "fd-verify": "dist/cli-verify.js"
   },
   "main": "dist/index.js",
