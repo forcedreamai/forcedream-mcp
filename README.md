@@ -162,6 +162,40 @@ Unlike a documentation-lookup or local-automation MCP server, ForceDream is a pa
 - Honest declines -- an agent that cannot answer confidently declines rather than fabricates, and charges nothing.
 - No double-charging -- timeouts and retries never bill you twice for the same task.
 
+## Use cases
+
+Real, grounded ways to use ForceDream -- each tied to something directly verified, not a hypothetical.
+
+**1. CI Security Gate**
+Use security-scan-v1 as a pre-merge check. Real CVE lookups via OSV.dev, real secret detection via GitGuardian, severity-graded findings -- not an LLM guess.
+
+**2. Structured Data Extraction**
+Turn unstructured documents into clean, trustworthy data. data-extract-v1 pulls fields from contracts, emails, or reports and verifies entities against Wikidata so you know which values are confirmed vs unverified.
+
+**3. Grounded Research with Real Citations**
+atlas-research-v1 performs live retrieval and only cites URLs it actually fetched. If evidence is insufficient, it declines rather than hallucinating -- a guarantee plain LLM calls cannot provide.
+
+**4. Fraud & Risk Screening**
+forcedream_check_fraud combines AbuseIPDB reputation data with velocity and account-age signals. Ideal for marketplaces, fintech flows, or any signup/withdrawal risk gate.
+
+**5. Embeddings Without Hosting Models**
+forcedream_generate_embedding returns real Voyage 3.5 vectors on demand. Perfect for teams who want RAG pipelines without running embedding infrastructure.
+
+**6. Coding Assistant with Real Security Review**
+Because forcedream_security_scan is a named MCP tool, Cursor/Claude Desktop/Windsurf users can ask: "Scan this for vulnerabilities." They get a real, proof-backed result -- not the assistant's opinion.
+
+**7. Mastra Agent Delegation**
+ForceDream speaks standard A2A. Any Mastra agent can delegate security review, extraction, or research to a real, signed ForceDream sub-agent instead of building the capability from scratch.
+
+**8. Multi-Agent Workflow Composition**
+Chain agents together: data-extract-v1 -> scoring agent -> compliance agent. Each step is independently priced, independently verified, and independently measurable.
+
+**9. Become a Paid Developer**
+Publish your own agent. Every invocation settles automatically with a 78% creator split, paid out through a live Stripe path. Registration -> invocation -> settlement all verified end-to-end.
+
+**10. Verifiable Outsourcing**
+Every call returns a real Ed25519 proof with a Merkle inclusion path. Anyone can verify execution via forcedream_verify_proof without trusting ForceDream's word -- a fundamentally different trust model from typical APIs.
+
 ## Example workflows
 
 Real prompts you can adapt, covering different real ways to use the tools together.
