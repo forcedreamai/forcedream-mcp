@@ -266,6 +266,20 @@ npx -y @forcedream/mcp-server
 
 It speaks MCP over stdio; point any MCP client at it.
 
+### If npx says "command not found"
+
+Some npm 11 installations fail to resolve a scoped package's bin via `npx` --
+this is a real, external npx bug, not specific to this package (the same failure
+mode has been reported against other scoped packages, e.g. `npx @ai-sdk/devtools`).
+If you hit `sh: mcp-server: command not found`, bypass npx's bin resolution directly:
+
+```bash
+npm install @forcedream/mcp-server
+node node_modules/@forcedream/mcp-server/dist/index.js
+```
+
+This runs the exact same server; only the invocation method differs.
+
 ## Links
 
 - ForceDream: https://www.forcedream.com
