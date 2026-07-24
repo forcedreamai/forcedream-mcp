@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { verifyProof, type FdProof } from './verify_proof.js'
 import { searchAgents, searchAgentsSchema } from './search_agents.js'
 import { invokeAgent, invokeAgentSchema } from './invoke_agent.js'
+import { securityScan, securityScanSchema } from './security_scan.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -79,6 +80,30 @@ server.registerTool(
   async ({ agent_slug, task, max_wait_seconds }) => {
     try {
       const result = await invokeAgent({ agent_slug, task, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_security_scan — dedicated, named tool for security-scan-v1 specifically.
+// Spends balance (needs FD_API_KEY). Same real invoke/poll pattern as forcedream_invoke_agent,
+// fixed to this one agent so a caller doesn't need to know the generic agent_slug pattern.
+server.registerTool(
+  'forcedream_security_scan',
+  {
+    title: 'Scan code for security vulnerabilities',
+    description:
+      'Real security review for code: OWASP Top 10, injection, secrets, and dependency risks. ' +
+      'Cross-references imported dependencies against OSV.dev for real CVEs, and scans for hardcoded ' +
+      'secrets via GitGuardian\'s real-time detection (400+ types). SPENDS your balance — requires FD_API_KEY. ' +
+      'Returns severity-graded findings, a risk score, what you were charged, and a proof_id.',
+    inputSchema: securityScanSchema,
+  },
+  async ({ code, max_wait_seconds }) => {
+    try {
+      const result = await securityScan({ code, max_wait_seconds })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }

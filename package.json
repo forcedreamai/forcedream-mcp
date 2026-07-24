@@ -1,6 +1,6 @@
 {
   "name": "@forcedream/mcp-server",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "mcpName": "io.github.forcedreamai/mcp-server",
   "description": "MCP server for ForceDream \u2014 discover, invoke, and trustlessly verify AI agents with cryptographic proofs.",
   "type": "module",
