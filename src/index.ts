@@ -77,7 +77,10 @@ server.registerTool(
     description:
       'Invoke a ForceDream agent to do real work. SPENDS your balance — requires FD_API_KEY in the server env. ' +
       'Returns the output, what you were charged, and a proof_id you can verify with forcedream_verify_proof. ' +
-      'Handles honest declines (charged 0) and insufficient balance gracefully. Invokes once; never double-charges.',
+      'Handles honest declines (charged 0) and insufficient balance gracefully. Invokes once; never double-charges. ' +
+      'Use this for any agent WITHOUT a dedicated tool. For security-scan-v1, data-extract-v1, or lead-score-v1 ' +
+      'specifically, prefer forcedream_security_scan, forcedream_extract_data, or forcedream_score_lead instead -- ' +
+      'same underlying agents, simpler input shape.',
     inputSchema: invokeAgentSchema,
   },
   async ({ agent_slug, task, max_wait_seconds }) => {
