@@ -8,6 +8,7 @@ import { invokeAgent, invokeAgentSchema } from './invoke_agent.js'
 import { securityScan, securityScanSchema } from './security_scan.js'
 import { extractData, extractDataSchema } from './extract_data.js'
 import { checkFraud, checkFraudSchema, generateEmbedding, generateEmbeddingSchema, marketQuote, marketQuoteSchema } from './direct_tools.js'
+import { scoreLead, scoreLeadSchema } from './score_lead.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -131,6 +132,31 @@ server.registerTool(
   async ({ fields, document, max_wait_seconds }) => {
     try {
       const result = await extractData({ fields, document, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_score_lead — dedicated, named tool for lead-score-v1 specifically.
+// Spends balance (needs FD_API_KEY). Same real invoke/poll pattern as forcedream_extract_data,
+// fixed to this one agent so a caller doesn't need to know the generic agent_slug pattern.
+server.registerTool(
+  'forcedream_score_lead',
+  {
+    title: 'Score a sales lead',
+    description:
+      'Score sales leads hot/warm/cold with weighted signals and a recommended next action — grounded in real, ' +
+      'live verification. Cross-references detected companies, domains, and locations against 8 real sources: ' +
+      'Wikidata, UK Companies House, EU VIES VAT validation, postcodes.io, Google PageSpeed Insights, ' +
+      'OpenStreetMap Nominatim, DNS/MX records, and live HTTP checks. Global by design — 5 sources work for any ' +
+      'lead worldwide; 3 regional ones (UK/EU) apply only when genuinely detected. SPENDS your balance — requires FD_API_KEY.',
+    inputSchema: scoreLeadSchema,
+  },
+  async ({ lead_description, max_wait_seconds }) => {
+    try {
+      const result = await scoreLead({ lead_description, max_wait_seconds })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
