@@ -9,6 +9,7 @@ import { securityScan, securityScanSchema } from './security_scan.js'
 import { extractData, extractDataSchema } from './extract_data.js'
 import { checkFraud, checkFraudSchema, generateEmbedding, generateEmbeddingSchema, marketQuote, marketQuoteSchema } from './direct_tools.js'
 import { scoreLead, scoreLeadSchema } from './score_lead.js'
+import { generateCode, generateCodeSchema } from './generate_code.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -160,6 +161,31 @@ server.registerTool(
   async ({ lead_description, max_wait_seconds }) => {
     try {
       const result = await scoreLead({ lead_description, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_generate_code — dedicated, named tool for code-generation-v1 specifically.
+// Spends balance (needs FD_API_KEY). Same real invoke/poll pattern as the other dedicated
+// tools, fixed to this one agent so a caller doesn't need to know the generic agent_slug pattern.
+server.registerTool(
+  'forcedream_generate_code',
+  {
+    title: 'Generate verified code',
+    description:
+      'Generates real, working code with real, live verification — not just an LLM\'s opinion. Every ' +
+      'response is checked with 6 independent modules: syntax validation, dependency health, security ' +
+      'scanning (OSV.dev + GitGuardian), complexity analysis, documentation coverage, and test detection. ' +
+      'Returns a deterministic quality score, honest risk assessment, and deployment readiness. SPENDS ' +
+      'your balance — requires FD_API_KEY.',
+    inputSchema: generateCodeSchema,
+  },
+  async ({ task_description, max_wait_seconds }) => {
+    try {
+      const result = await generateCode({ task_description, max_wait_seconds })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
