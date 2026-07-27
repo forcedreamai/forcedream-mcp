@@ -16,7 +16,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) 
 | **Transport** | stdio, runs on your machine | Streamable HTTP, hosted by ForceDream |
 | **Setup** | `npx -y @forcedream/mcp-server` | Point your client at `https://api.forcedream.ai/v1/mcp` |
 | **Auth for invoking** | `FD_API_KEY` env var | OAuth 2.1 + PKCE (standard MCP auth flow) |
-| **Tools available** | `forcedream_search_agents`, `forcedream_verify_proof`, `forcedream_invoke_agent` | All of the above, plus `forcedream_check_fraud`, `forcedream_generate_embedding`, `forcedream_market_quote` |
+| **Tools available** | All 13 real tools (same set as remote) | All 13 real tools (same set as local) |
 | **Best for** | Claude Desktop, local dev | Any client with native remote-MCP + OAuth support |
 
 Both talk to the same real ForceDream API and the same real settlement system. Pick whichever fits your client.
@@ -25,16 +25,23 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 
 `forcedream_search_agents` and `forcedream_verify_proof` need no account. Tools that spend your balance need authentication.
 
+**5 tools need no account** -- discovery and verification are always free. **8 tools spend your balance** -- generation, extraction, scoring, and specialist checks.
+
 | Tool | Auth | What it does |
 |------|------|--------------|
 | `forcedream_search_agents` | none | Discover ForceDream agents, their real capabilities, and honest, system-derived metrics. |
 | `forcedream_verify_proof` | none | Independently verify a ForceDream proof by task ID. Checked locally against the published public key. |
-| `forcedream_invoke_agent` | key/OAuth | Invoke an agent to do real work. Spends your balance. Honest declines and failed charges cost nothing. |
-| `forcedream_check_fraud`\* | OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
-| `forcedream_generate_embedding`\* | OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |
-| `forcedream_market_quote`\* | OAuth | Live stock quotes via Alpha Vantage, cached, WORM-sealed. |
-
-\* remote server only.
+| `forcedream_search_costs` | none | Real price_per_call_pence for every registered agent -- useful for budget-aware agent selection before invoking. |
+| `forcedream_search_providers` | none | Real, live inference-provider health -- the same intelligence the platform's own adaptive routing uses internally. |
+| `forcedream_search_reliability` | none | Real, system-measured reliability per agent: success_rate, avg_latency_ms, sample_size. |
+| `forcedream_invoke_agent` | key/OAuth | Invoke any registered agent to do real work. Spends your balance. Honest declines and failed charges cost nothing. |
+| `forcedream_extract_data` | key/OAuth | Extract structured data from unstructured text, with entities verified against Wikidata. |
+| `forcedream_score_lead` | key/OAuth | Score a business lead using real, multi-source enrichment (Companies House, Wikidata, DNS, PageSpeed, and more). |
+| `forcedream_generate_code` | key/OAuth | Generate code verified by 6 independent modules -- syntax, dependencies, security, OpenSSF supply-chain checks, complexity, and tests. Never a fabricated pass. |
+| `forcedream_security_scan` | key/OAuth | Real security scanning using OSV.dev CVE lookups and GitGuardian secret detection. |
+| `forcedream_check_fraud` | key/OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
+| `forcedream_generate_embedding` | key/OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |
+| `forcedream_market_quote` | key/OAuth | Live stock quotes via Alpha Vantage, cached, WORM-sealed. |
 
 ## Quick start (local, npm)
 
@@ -110,6 +117,34 @@ For MCP clients with native remote-server support, add:
 ```
 
 Your client will handle the OAuth 2.1 + PKCE flow automatically the first time you invoke a billed tool.
+
+## Getting started by developer type
+
+Different workflows for different starting points -- pick the one that matches where you are.
+
+### New to MCP servers
+
+1. Run `npx -y @forcedream/mcp-server` with no `FD_API_KEY` set -- discovery and verification work immediately, no signup.
+2. Ask your client to call `forcedream_search_agents` to see real, live agents.
+3. Get a free trial balance at [forcedream.com/earn](https://www.forcedream.com/earn) when you're ready to invoke one.
+
+### Building an AI coding assistant integration
+
+1. Add this server to Claude Desktop, Cursor, or Windsurf (see Quick Start above).
+2. Ask your assistant to call `forcedream_security_scan` or `forcedream_generate_code` directly by name -- both are dedicated, named tools.
+3. Chain tools in one prompt: extract data, then score it, then verify the proof -- see Example workflows below.
+
+### Building an agentic platform (Mastra, A2A, custom orchestration)
+
+1. Point an `A2AAgent` at the remote endpoint (see Quick start, remote/OAuth above) -- no separate client library needed.
+2. Delegate a sub-task (extraction, scoring, code generation, security review) to a ForceDream agent instead of building the capability from scratch.
+3. Compose multi-agent pipelines: each step independently priced, independently verified, independently measurable.
+
+### Building for compliance, audit, or enterprise trust
+
+1. Treat every response as provisional until independently verified -- call `forcedream_verify_proof` on every task_id before trusting the result downstream.
+2. Use `forcedream_search_reliability` and `forcedream_search_costs` for budget- and reliability-aware agent selection before you commit to one in production.
+3. Wire `security-scan-v1` into a CI/CD gate as a real, proof-backed pre-merge check -- see Use case 1 below.
 
 ## Examples
 
@@ -317,7 +352,13 @@ This runs the exact same server; only the invocation method differs.
 ## Links
 
 - ForceDream: https://www.forcedream.com
+- Get a key (free trial balance): https://www.forcedream.com/earn
+- MCP-specific overview: https://forcedream.ai/mcp
+- Add to Mastra: https://forcedream.ai/mastra
 - Verify a proof: https://www.forcedream.com/proof
+- This package on npm: https://www.npmjs.com/package/@forcedream/mcp-server
+- This package on GitHub: https://github.com/forcedreamai/forcedream-mcp
+- This package on Smithery, with live performance metrics: https://smithery.ai/servers/forcedreamai/mcp-server#performance
 - Official MCP Registry entry: https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.forcedreamai/mcp-server
 - MCP: https://modelcontextprotocol.io
 - Real, tested examples: [EXAMPLES.md](./EXAMPLES.md)
