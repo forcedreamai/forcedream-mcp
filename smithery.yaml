@@ -1,0 +1,23 @@
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+# ForceDream's MCP server is remote (HTTP), already deployed at api.forcedream.ai/v1/mcp.
+# Several tools (forcedream_generate_code, forcedream_score_lead, etc.) require OAuth,
+# which Smithery already handles automatically for this server -- no configSchema needed
+# for those. This configSchema covers the optional, direct fd_live_ API key some tools
+# (forcedream_check_fraud, forcedream_generate_embedding, forcedream_market_quote) accept
+# as an alternative to OAuth, so Smithery can prompt for it when a user wants that path.
+startCommand:
+  type: http
+  configSchema:
+    type: object
+    properties:
+      apiKey:
+        type: string
+        title: ForceDream API Key
+        description: >-
+          Optional. A real fd_live_... key from forcedream.com/earn. Only needed for
+          direct-key tools (forcedream_check_fraud, forcedream_generate_embedding,
+          forcedream_market_quote). Balance-spending tools use OAuth instead, which
+          Smithery handles automatically -- no key required for those.
+    required: []
+    exampleConfig:
+      apiKey: fd_live_example_key_here
