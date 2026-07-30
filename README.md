@@ -16,7 +16,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) 
 | **Transport** | stdio, runs on your machine | Streamable HTTP, hosted by ForceDream |
 | **Setup** | `npx -y @forcedream/mcp-server` | Point your client at `https://api.forcedream.ai/v1/mcp` |
 | **Auth for invoking** | `FD_API_KEY` env var | OAuth 2.1 + PKCE (standard MCP auth flow) |
-| **Tools available** | All 13 real tools (same set as remote) | All 13 real tools (same set as local) |
+| **Tools available** | All 14 real tools (same set as remote) | All 14 real tools (same set as local) |
 | **Best for** | Claude Desktop, local dev | Any client with native remote-MCP + OAuth support |
 
 Both talk to the same real ForceDream API and the same real settlement system. Pick whichever fits your client.
@@ -25,7 +25,7 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 
 `forcedream_search_agents` and `forcedream_verify_proof` need no account. Tools that spend your balance need authentication.
 
-**5 tools need no account** -- discovery and verification are always free. **8 tools spend your balance** -- generation, extraction, scoring, and specialist checks.
+**5 tools need no account** -- discovery and verification are always free. **9 tools spend your balance** -- generation, extraction, scoring, sentiment analysis, and specialist checks.
 
 | Tool | Auth | What it does |
 |------|------|--------------|
@@ -38,6 +38,7 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 | `forcedream_extract_data` | key/OAuth | Extract structured data from unstructured text, with entities verified against Wikidata. |
 | `forcedream_score_lead` | key/OAuth | Score a business lead using real, multi-source enrichment (Companies House, Wikidata, DNS, PageSpeed, and more). |
 | `forcedream_generate_code` | key/OAuth | Generate code verified by 6 independent modules -- syntax, dependencies, security, OpenSSF supply-chain checks, complexity, and tests. Never a fabricated pass. |
+| `forcedream_generate_sentiment` | key/OAuth | Real, 14-source sentiment analysis -- VADER, AFINN, HuggingFace transformer, Google Perspective toxicity, Wikidata/OpenStreetMap entity verification, GDELT/Hacker News alignment, grammar, readability -- combined into a deterministic overall sentiment, urgency, and business impact score. |
 | `forcedream_security_scan` | key/OAuth | Real security scanning using OSV.dev CVE lookups and GitGuardian secret detection. |
 | `forcedream_check_fraud` | key/OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
 | `forcedream_generate_embedding` | key/OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |

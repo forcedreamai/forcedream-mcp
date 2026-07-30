@@ -10,6 +10,7 @@ import { extractData, extractDataSchema } from './extract_data.js'
 import { checkFraud, checkFraudSchema, generateEmbedding, generateEmbeddingSchema, marketQuote, marketQuoteSchema } from './direct_tools.js'
 import { scoreLead, scoreLeadSchema } from './score_lead.js'
 import { generateCode, generateCodeSchema } from './generate_code.js'
+import { generateSentiment, generateSentimentSchema } from './generate_sentiment.js'
 import { searchReliability, searchReliabilitySchema } from './search_reliability.js'
 import { searchCosts, searchCostsSchema } from './search_costs.js'
 import { searchProviders } from './search_providers.js'
@@ -186,6 +187,31 @@ server.registerTool(
   async ({ task_description, max_wait_seconds }) => {
     try {
       const result = await generateCode({ task_description, max_wait_seconds })
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+    } catch (e) {
+      return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
+    }
+  }
+)
+
+// forcedream_generate_sentiment — dedicated, named tool for sentiment-v1 specifically.
+// Spends balance (needs FD_API_KEY). Same real invoke/poll pattern as the other dedicated
+// tools, fixed to this one agent so a caller doesn't need to know the generic agent_slug pattern.
+server.registerTool(
+  'forcedream_generate_sentiment',
+  {
+    title: 'Analyze sentiment (14-source verified)',
+    description:
+      'Real, 14-source sentiment analysis — not just an LLM\'s opinion. Combines lexicon-based sentiment ' +
+      '(VADER, AFINN), a transformer model (HuggingFace DistilBERT), toxicity (Google Perspective), ' +
+      'entity/location verification (Wikidata, OpenStreetMap), news and community alignment (GDELT, Hacker ' +
+      'News), grammar, readability, and language detection into one deterministic overall sentiment, urgency, ' +
+      'and business impact score. SPENDS your balance — requires FD_API_KEY.',
+    inputSchema: generateSentimentSchema,
+  },
+  async ({ text, max_wait_seconds }) => {
+    try {
+      const result = await generateSentiment({ text, max_wait_seconds })
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
     } catch (e) {
       return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: (e as Error).message }, null, 2) }], isError: true }
