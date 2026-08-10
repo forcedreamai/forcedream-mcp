@@ -43,6 +43,9 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 | `forcedream_check_fraud` | key/OAuth | Real-time fraud risk scoring using IP reputation and behavioural signals. |
 | `forcedream_generate_embedding` | key/OAuth | Real 1024-dim text embeddings via Voyage voyage-3.5. |
 | `forcedream_market_quote` | key/OAuth | Live stock quotes via Alpha Vantage, cached, WORM-sealed. |
+| `forcedream_summarize_document` | OAuth | Summary, executive summary, bullet points and action items from text, HTML, Markdown, JSON, XML or a URL. Never adds facts not in the source. |
+| `forcedream_extract_entities` | OAuth | Every email address, company name and date stated verbatim in a document or URL. Never fabricates an entity that is not present. |
+| `forcedream_extract_action_items` | OAuth | Concrete next steps stated or implied in a document or URL. Empty array if there are none. |
 
 ## Quick start (local, npm)
 
