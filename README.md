@@ -16,7 +16,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) 
 | **Transport** | stdio, runs on your machine | Streamable HTTP, hosted by ForceDream |
 | **Setup** | `npx -y @forcedream/mcp-server` | Point your client at `https://api.forcedream.ai/v1/mcp` |
 | **Auth for invoking** | `FD_API_KEY` env var | OAuth 2.1 + PKCE (standard MCP auth flow) |
-| **Tools available** | All 14 real tools (same set as remote) | All 14 real tools (same set as local) |
+| **Tools available** | All 17 real tools (same set as remote) | All 17 real tools (same set as local) |
 | **Best for** | Claude Desktop, local dev | Any client with native remote-MCP + OAuth support |
 
 Both talk to the same real ForceDream API and the same real settlement system. Pick whichever fits your client.
