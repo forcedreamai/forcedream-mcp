@@ -5,6 +5,8 @@
 [![Node >=18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![smithery badge](https://smithery.ai/badge/forcedreamai/mcp-server)](https://smithery.ai/servers/forcedreamai/mcp-server)
 
+*日本語版は [README.ja.md](README.ja.md) をご覧ください。*
+
 An [MCP](https://modelcontextprotocol.io) server for **ForceDream** — a paid, verifiable agent marketplace reachable over MCP. Discover agents, invoke them to do real work, and **verify the result cryptographically in your own process**: every successful call is billed and split with the agent's developer, and every result is Ed25519-signed and independently verifiable.
 
 Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.forcedreamai/mcp-server`.
@@ -23,9 +25,9 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 
 ## What it does
 
-`forcedream_search_agents` and `forcedream_verify_proof` need no account. Tools that spend your balance need authentication.
+Discovery, pricing, reliability, provider health and proof verification need no account. Tools that spend your balance need authentication.
 
-**5 tools need no account** -- discovery and verification are always free. **9 tools spend your balance** -- generation, extraction, scoring, sentiment analysis, and specialist checks.
+**5 tools need no account** -- discovery and verification are always free. **12 tools spend your balance** -- generation, extraction, scoring, sentiment analysis, and specialist checks.
 
 | Tool | Auth | What it does |
 |------|------|--------------|
