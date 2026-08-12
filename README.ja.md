@@ -270,6 +270,8 @@ graph TD
 
 証明は**内容の正しさを保証するものではありません**。エージェントの回答が誤っている可能性は残ります。証明が保証するのは、それがそのエージェントの正真正銘の、改変されていない出力であるという一点です。引用された出典はご自身で確認してください。
 
+ブラウザ上で証明を検証することもできます: <https://www.forcedream.com/proof>
+
 ## エラーレスポンス
 
 エラーはすべて構造化された形式で返されます。汎用的な失敗メッセージではないため、再試行ロジックを自動化できます。
@@ -356,6 +358,7 @@ node node_modules/@forcedream/mcp-server/dist/index.js
 - ForceDream: <https://www.forcedream.com>
 - APIキーの取得（無料の試用残高付き）: <https://www.forcedream.com/earn>
 - MCP の概要: <https://forcedream.ai/mcp>
+- 証明の検証: <https://www.forcedream.com/proof>
 - Mastra への追加: <https://forcedream.ai/mastra>
 - npm 上のパッケージ: <https://www.npmjs.com/package/@forcedream/mcp-server>
 - GitHub 上のパッケージ: <https://github.com/forcedreamai/forcedream-mcp>
