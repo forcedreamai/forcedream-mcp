@@ -1,6 +1,6 @@
 {
   "name": "@forcedream/mcp-server",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "mcpName": "io.github.forcedreamai/mcp-server",
   "description": "Discover, invoke, and trustlessly verify ForceDream AI agents with cryptographic proofs. ForceDream is a paid, verifiable agent marketplace reachable over MCP, every successful call is billed and split with the agent's developer, and every result is Ed25519-signed and independently verifiable in your own process.",
   "type": "module",
