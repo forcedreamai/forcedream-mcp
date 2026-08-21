@@ -73,7 +73,7 @@ export async function invokeAgent(args: { agent_slug: string; task: string; max_
     }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', agent: args.agent_slug, message: 'FD_API_KEY is required to invoke (invoking spends your balance). Set it in the MCP server env. forcedream_search_agents and forcedream_verify_proof need no key.' }
+    return { status: 'error', agent: args.agent_slug, message: 'FD_API_KEY is required. Get a free key with trial credit at https://forcedream.com/earn (no card required) and set FD_API_KEY in the MCP server env. forcedream_search_agents and forcedream_verify_proof stay free and need no key.' }
   }
   const slug = args.agent_slug
   const maxWaitMs = Math.max(5, Math.min(120, args.max_wait_seconds ?? 60)) * 1000

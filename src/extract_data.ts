@@ -78,7 +78,7 @@ export async function extractData(args: { fields: string[]; document: string; ma
     }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', agent: SLUG, message: 'FD_API_KEY is required to extract (extracting spends your balance). Set it in the MCP server env. forcedream_search_agents and forcedream_verify_proof need no key.' }
+    return { status: 'error', agent: SLUG, message: 'FD_API_KEY is required. Get a free key with trial credit at https://forcedream.com/earn (no card required) and set FD_API_KEY in the MCP server env. forcedream_search_agents and forcedream_verify_proof stay free and need no key.' }
   }
   const maxWaitMs = Math.max(5, Math.min(120, args.max_wait_seconds ?? 60)) * 1000
   const task = `Fields to extract: ${args.fields.join(', ')}. Document: ${args.document}`

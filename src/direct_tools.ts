@@ -42,7 +42,7 @@ export async function checkFraud(args: { ip?: string }): Promise<CheckFraudResul
     return { status: 'completed', risk_score: 0, signals: {}, verdict: 'allow', ip_reputation: { abuseipdb_score: null }, mock: true, message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real balance was spent, no real AbuseIPDB lookup was made.' }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', message: 'FD_API_KEY is required (this tool spends your balance). Set it in the MCP server env.' }
+    return { status: 'error', message: 'FD_API_KEY is required. Get a free key with trial credit at https://forcedream.com/earn (no card required) and set FD_API_KEY in the MCP server env. forcedream_search_agents and forcedream_verify_proof stay free and need no key.' }
   }
   const res = await postJson(`${FD_API}/v1/tools/check-fraud`, { ip: args.ip || '' })
   if (res.status === 401) return { status: 'error', message: 'Invalid FD_API_KEY (401).' }
@@ -80,7 +80,7 @@ export async function generateEmbedding(args: { text: string; input_type?: strin
     return { status: 'completed', dimensions: 1024, tokens: 0, embedding: [], cost_pence: 0, mock: true, message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real balance was spent, no real embedding was generated.' }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', message: 'FD_API_KEY is required (this tool spends your balance). Set it in the MCP server env.' }
+    return { status: 'error', message: 'FD_API_KEY is required. Get a free key with trial credit at https://forcedream.com/earn (no card required) and set FD_API_KEY in the MCP server env. forcedream_search_agents and forcedream_verify_proof stay free and need no key.' }
   }
   const res = await postJson(`${FD_API}/v1/embeddings`, { text: args.text, input_type: args.input_type })
   if (res.status === 401) return { status: 'error', message: 'Invalid FD_API_KEY (401).' }
@@ -118,7 +118,7 @@ export async function marketQuote(args: { symbol: string }): Promise<MarketQuote
     return { status: 'completed', symbol: args.symbol, price: 0, change_percent: 0, volume: 0, mock: true, message: 'MOCK MODE ACTIVE (FD_MOCK_MODE=true): no real balance was spent, no real market data was fetched.' }
   }
   if (!process.env.FD_API_KEY) {
-    return { status: 'error', message: 'FD_API_KEY is required (this tool spends your balance). Set it in the MCP server env.' }
+    return { status: 'error', message: 'FD_API_KEY is required. Get a free key with trial credit at https://forcedream.com/earn (no card required) and set FD_API_KEY in the MCP server env. forcedream_search_agents and forcedream_verify_proof stay free and need no key.' }
   }
   const res = await postJson(`${FD_API}/v1/tools/market-quote`, { symbol: args.symbol })
   if (res.status === 401) return { status: 'error', message: 'Invalid FD_API_KEY (401).' }
