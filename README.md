@@ -18,7 +18,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io) 
 | **Transport** | stdio, runs on your machine | Streamable HTTP, hosted by ForceDream |
 | **Setup** | `npx -y @forcedream/mcp-server` | Point your client at `https://api.forcedream.ai/v1/mcp` |
 | **Auth for invoking** | `FD_API_KEY` env var | OAuth 2.1 + PKCE (standard MCP auth flow) |
-| **Tools available** | All 17 real tools (same set as remote) | All 17 real tools (same set as local) |
+| **Tools available** | 14 tools | 21 tools: the 14 local tools plus 7 hosted-only tools |
 | **Best for** | Claude Desktop, local dev | Any client with native remote-MCP + OAuth support |
 
 Both talk to the same real ForceDream API and the same real settlement system. Pick whichever fits your client.
@@ -27,7 +27,7 @@ Both talk to the same real ForceDream API and the same real settlement system. P
 
 Discovery, pricing, reliability, provider health and proof verification need no account. Tools that spend your balance need authentication.
 
-**5 tools need no account** -- discovery and verification are always free. **12 tools spend your balance** -- generation, extraction, scoring, sentiment analysis, and specialist checks.
+**Discovery and verification tools need no account** -- they are always free. **Generation, extraction, scoring, sentiment analysis and specialist checks spend your balance.**
 
 | Tool | Auth | What it does |
 |------|------|--------------|
