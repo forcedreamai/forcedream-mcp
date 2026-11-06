@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.3
+
+- Docs: corrected tool counts. This package registers 14 tools; the hosted endpoint at https://api.forcedream.ai/v1/mcp serves 21 (the 14 plus 7 hosted-only tools). No code changes.
+
 ## v0.5.1
 
 - BREAKING: all tool names now prefixed with forcedream_ (e.g. search_agents -> forcedream_search_agents), matching the same change made to the remote server. A real, recognized MCP best practice for avoiding name collisions when multiple servers are connected to the same client. Prior version entries below deliberately keep the tool names as they genuinely were at the time -- not rewritten.
